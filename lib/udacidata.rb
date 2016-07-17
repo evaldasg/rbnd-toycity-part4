@@ -53,6 +53,10 @@ class Udacidata
       n == 1 ? last_lines[0] : last_lines
     end
 
+    def find(id)
+      all.detect { |product| product.id == id }
+    end
+
     private
 
     def data_path
