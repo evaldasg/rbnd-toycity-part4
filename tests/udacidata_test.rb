@@ -3,11 +3,10 @@ require_relative '../lib/product'
 require_relative '../data/seeds'
 
 class TestUdacidata < MiniTest::Test
-
   def setup
-    @data_path = File.dirname(__FILE__) + "/../data/data.csv"
-    CSV.open(@data_path, "wb") do |csv|
-      csv << ["id", "brand", "product", "price"]
+    @data_path = File.dirname(__FILE__) + '/../data/data.csv'
+    CSV.open(@data_path, 'wb') do |csv|
+      csv << ['id', 'brand', 'product', 'price']
     end
     db_seed
   end
@@ -15,7 +14,7 @@ class TestUdacidata < MiniTest::Test
   def test_create_method_adds_to_database
     before = CSV.read(@data_path).length
     5.times do
-      Product.create(brand: "WalterToys", name: "Sticky Notes", price: 34.00)
+      Product.create(brand: 'WalterToys', name: 'Sticky Notes', price: 34.00)
     end
     after = CSV.read(@data_path).length
     assert(after == before + 5)
