@@ -12,6 +12,12 @@ class Udacidata
     self
   end
 
+  def to_hash
+    instance_variables.each_with_object({}) do |variable, hash|
+      hash[variable.to_s.delete('@').to_sym] = instance_variable_get(variable)
+    end
+  end
+
   private
 
   def update_in_db(attrs)
