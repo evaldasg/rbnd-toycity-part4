@@ -15,4 +15,8 @@ module Analyzable
       filters: { price: :add_currency },
     )
   end
+
+  def count_by_brand(objects)
+    { objects[0].brand => objects.size }
+  end
 end

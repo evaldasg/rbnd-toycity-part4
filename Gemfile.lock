@@ -61,7 +61,7 @@ DEPENDENCIES
   faker (= 1.6.5)
   guard (= 2.14.0)
   guard-minitest (= 2.4.5)
-  hirb
+  hirb (= 0.7.3)
   minitest (= 5.9.0)
   minitest-reporters (= 1.1.10)
 
