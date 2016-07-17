@@ -1,4 +1,4 @@
-require 'minitest/autorun'
+require_relative 'tests_helper'
 require_relative '../lib/product'
 require_relative '../data/seeds'
 
@@ -162,5 +162,4 @@ class TestUdacidata < MiniTest::Test
   def teardown
     File.delete(@data_path)
   end
-
 end
