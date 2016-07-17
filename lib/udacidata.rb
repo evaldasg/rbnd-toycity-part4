@@ -38,6 +38,21 @@ class Udacidata
       frist_n_csv_rows(n)
     end
 
+    # Here I'll be using this tool:
+    #   wc (short for word count) is a command in Unix-like operating systems.
+    #   wc -l <filename> prints the line count (note that if the last line does not have \n, it will not be counted)
+    #   line_count variable will store value of lines number in data.csv
+    #   drop_lines variable is line_count - 1 (for headers) - n (for actual line number that we'll leave)
+    #   csv variable is enumarator wich will drop drop_lines number of rows, and return array with
+    #     the last row entry only; this helps to avoid array initialization in memory
+    def last(n = 1)
+      line_count = `wc -l #{data_path}`.to_i
+      drop_lines = line_count - 1 - n
+      csv = CSV.foreach(data_path, headers: true)
+      last_lines = csv.drop(drop_lines).first(n).map { |row| Product.new(row.to_hash) }
+      n == 1 ? last_lines[0] : last_lines
+    end
+
     private
 
     def data_path
@@ -45,12 +60,12 @@ class Udacidata
     end
 
     def first_csv_row
-      attrs = CSV.open(data_path, headers: true, &:first).to_hash
+      attrs = CSV.foreach(data_path, headers: true).first.to_hash
       Product.new(attrs)
     end
 
     def frist_n_csv_rows(n)
-      csv = CSV.read(data_path, headers: true).first(n)
+      csv = CSV.foreach(data_path, headers: true).first(n)
       csv.map { |row| Product.new(row.to_hash) }
     end
   end

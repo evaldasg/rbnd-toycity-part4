@@ -18,8 +18,8 @@ end
 
 def db_seed
   CSV.open(data_path, 'a+') do |csv|
-    10.times do |i|
-      product = Product.new(attrs(i + 1))
+    1.upto(10).each do |index|
+      product = Product.new(attrs(index))
       csv << product.instance_variables.map { |variable| product.instance_variable_get(variable) }
     end
   end
