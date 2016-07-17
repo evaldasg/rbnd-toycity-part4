@@ -6,6 +6,21 @@ require 'byebug'
 class Udacidata
   # Your code goes here!
 
+  def update(attrs = {})
+    attrs.keys.each { |key| instance_variable_set("@#{key}", attrs[key]) if instance_variable_defined?("@#{key}") }
+    update_in_db(attrs)
+    self
+  end
+
+  private
+
+  def update_in_db(attrs)
+    csv_data = CSV.table(data_path, headers: true)
+    csv_row = csv_data.detect { |row| row[:id] == self.id } # rubocop:disable Style/RedundantSelf
+    attrs.keys.each { |key| csv_row[key] = attrs[key] }
+    File.open(data_path, 'w') { |file| file.write(csv_data.to_csv) }
+  end
+
   class << self
     def create(attrs = nil)
       # If the object's data is already in the database
@@ -54,7 +69,9 @@ class Udacidata
     end
 
     def find(id)
-      all.detect { |product| product.id == id }
+      csv_data = CSV.table(data_path, headers: true)
+      attrs = csv_data.detect { |row| row[:id] == id }
+      Product.new(attrs.to_hash)
     end
 
     def destroy(id)
