@@ -19,4 +19,8 @@ module Analyzable
   def count_by_brand(objects)
     { objects[0].brand => objects.size }
   end
+
+  def count_by_name(objects)
+    { objects[0].name => objects.size }
+  end
 end
