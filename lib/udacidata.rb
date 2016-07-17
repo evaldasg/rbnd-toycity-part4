@@ -97,14 +97,14 @@ class Udacidata
     def where(options = {})
       keys = options.keys
       csv = CSV.foreach(data_path, headers: true)
-      selectd_rows = csv.select do |row|
+      selected_rows = csv.select do |row|
         should_select = false
         keys.each do |key|
-          should_select = true if row[key] == options[key]
+          should_select = true if row[key.to_s] == options[key]
         end
         should_select
       end
-      selectd_rows.map { |row| Product.new(row.to_hash) }
+      selected_rows.map { |row| Product.new(row.to_hash) }
     end
 
     private
