@@ -1,5 +1,7 @@
 require 'hirb'
+require 'colorize'
 
+Hirb::View.enable
 Hirb::Helpers::Table::Filters.module_eval(%q{def add_currency(val) "$ #{val}" end})
 
 module Analyzable
@@ -13,7 +15,7 @@ module Analyzable
       fields: [:id, :brand, :name, :price],
       headers: { id: 'ID', brand: 'Brand', name: 'Name', price: 'Price' },
       filters: { price: :add_currency },
-    )
+    ).yellow
   end
 
   def count_by_brand(objects)

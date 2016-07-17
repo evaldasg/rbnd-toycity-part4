@@ -27,6 +27,10 @@ class Udacidata
     File.open(data_path, 'w') { |file| file.write(csv_data.to_csv) }
   end
 
+  def data_path
+    self.class.send(:data_path)
+  end
+
   class << self
     def create(attrs = nil)
       # If the object's data is already in the database
