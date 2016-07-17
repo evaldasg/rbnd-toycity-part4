@@ -8,13 +8,13 @@ class Product < Udacidata
     # Get last ID from the database if ID exists
     fetch_last_id
     # Set the ID if it was passed in, otherwise use last existing ID
-    @id = opts[:id] ? opts[:id].to_i : @@count_class_instances
+    @id = (opts[:id] || opts['id']) ? (opts[:id] || opts['id']).to_i : @@count_class_instances
     # Increment ID by 1
-    auto_increment unless opts[:id]
+    auto_increment unless opts[:id] || opts['id']
     # Set the brand, name, and price normally
-    @brand = opts[:brand]
-    @name = opts[:name]
-    @price = opts[:price]
+    @brand = opts[:brand] || opts['brand']
+    @name = opts[:name] || opts['name']
+    @price = opts[:price] || opts['price']
   end
 
   private

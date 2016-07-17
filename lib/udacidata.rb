@@ -32,6 +32,11 @@ class Udacidata
       end
       array
     end
+
+    def first
+      attrs = CSV.open(data_path, headers: true, &:first).to_hash
+      Product.new(attrs)
+    end
   end
 
   private

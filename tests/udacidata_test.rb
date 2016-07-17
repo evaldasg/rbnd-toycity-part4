@@ -37,23 +37,23 @@ class TestUdacidata < MiniTest::Test
     end
   end
 
-  # def test_all_method_returns_all_products_in_database
-  #   expected = CSV.read(@data_path).drop(1).length
-  #   actual = Product.all.length
-  #   assert_equal(expected, actual)
-  # end
-  #
-  # def test_first_method_returns_product_object
-  #   product = Product.first
-  #   assert_instance_of(Product, product)
-  # end
-  #
-  # def test_first_method_returns_correct_product
-  #   product = Product.first
-  #   data = CSV.read(@data_path).drop(1)
-  #   assert_equal(data.first[0].to_i, product.id)
-  # end
-  #
+  def test_all_method_returns_all_products_in_database
+    expected = CSV.read(@data_path).drop(1).length
+    actual = Product.all.length
+    assert_equal(expected, actual)
+  end
+
+  def test_first_method_returns_product_object
+    product = Product.first
+    assert_instance_of(Product, product)
+  end
+
+  def test_first_method_returns_correct_product
+    product = Product.first
+    data = CSV.read(@data_path).drop(1)
+    assert_equal(data.first[0].to_i, product.id)
+  end
+
   # def test_first_n_returns_array
   #   array_of_products = Product.first(3)
   #   assert_kind_of(Array, array_of_products)
