@@ -17,11 +17,26 @@ class Udacidata
       # save the data in the database
       # return the object
       object = new(attrs)
-      @data_path = File.expand_path('./data/data.csv')
-      CSV.open(@data_path, 'a+') do |csv|
-        csv << object.instance_variables.map { |var| object.instance_variable_get(var) }
+      CSV.open(data_path, 'a+') do |csv|
+        csv << object.instance_variables.map { |variable| object.instance_variable_get(variable) }
       end
       object
     end
+
+    def all
+      # TODO: when create method will not create duplicates on DB
+      #   then change here Product to create method call
+      array = []
+      CSV.foreach(data_path, headers: true) do |row|
+        array << Product.new(row.to_hash)
+      end
+      array
+    end
+  end
+
+  private
+
+  def data_path
+    @data_path ||= File.expand_path('./data/data.csv')
   end
 end
