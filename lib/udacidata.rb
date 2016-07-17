@@ -77,6 +77,19 @@ class Udacidata
       Product.new(attrs.to_hash)
     end
 
+    def where(options = {})
+      keys = options.keys
+      csv = CSV.foreach(data_path, headers: true)
+      selectd_rows = csv.select do |row|
+        should_select = false
+        keys.each do |key|
+          should_select = true if row[key] == options[key]
+        end
+        should_select
+      end
+      selectd_rows.map { |row| Product.new(row.to_hash) }
+    end
+
     private
 
     def data_path
