@@ -65,6 +65,18 @@ class Udacidata
       deleted_object
     end
 
+    def find_by_brand(value)
+      csv_data = CSV.table(data_path, headers: true)
+      attrs = csv_data.detect { |row| row[:brand] == value }
+      Product.new(attrs.to_hash)
+    end
+
+    def find_by_name(value)
+      csv_data = CSV.table(data_path, headers: true)
+      attrs = csv_data.detect { |row| row[:name] == value }
+      Product.new(attrs.to_hash)
+    end
+
     private
 
     def data_path
