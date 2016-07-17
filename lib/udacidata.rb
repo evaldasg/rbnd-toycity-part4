@@ -33,15 +33,25 @@ class Udacidata
       array
     end
 
-    def first
+    def first(n = 1)
+      return first_csv_row if n == 1
+      frist_n_csv_rows(n)
+    end
+
+    private
+
+    def data_path
+      @data_path ||= File.expand_path('./data/data.csv')
+    end
+
+    def first_csv_row
       attrs = CSV.open(data_path, headers: true, &:first).to_hash
       Product.new(attrs)
     end
-  end
 
-  private
-
-  def data_path
-    @data_path ||= File.expand_path('./data/data.csv')
+    def frist_n_csv_rows(n)
+      csv = CSV.read(data_path, headers: true).first(n)
+      csv.map { |row| Product.new(row.to_hash) }
+    end
   end
 end
