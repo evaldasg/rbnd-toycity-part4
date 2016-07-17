@@ -57,6 +57,14 @@ class Udacidata
       all.detect { |product| product.id == id }
     end
 
+    def destroy(id)
+      deleted_object = ''
+      csv_data = CSV.table(data_path, headers: true)
+      csv_data.delete_if { |row| row[:id] == id && deleted_object = Product.new(row.to_hash) }
+      File.open(data_path, 'w') { |file| file.write(csv_data.to_csv) }
+      deleted_object
+    end
+
     private
 
     def data_path
