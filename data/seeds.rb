@@ -4,7 +4,7 @@ require 'faker'
 # fake data for testing purposes
 
 def data_path
-  File.expand_path('./data/data.csv')
+  File.dirname(__FILE__) + '/data.csv'
 end
 
 def attrs(id)

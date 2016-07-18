@@ -103,7 +103,7 @@ class Udacidata
     private
 
     def data_path
-      @data_path ||= File.expand_path('./data/data.csv')
+      @data_path = File.dirname(__FILE__) + '/../data/data.csv'
     end
 
     def first_csv_row
