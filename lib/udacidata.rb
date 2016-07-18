@@ -33,14 +33,8 @@ class Udacidata
 
   class << self
     def create(attrs = nil)
-      # If the object's data is already in the database
-      # create the object
-      # return the object
-
-      # If the object's data is not in the database
-      # create the object
-      # save the data in the database
-      # return the object
+      # objects = where(attrs)
+      # return objects.first unless objects.empty?
       object = new(attrs)
       CSV.open(data_path, 'a+') do |csv|
         csv << object.instance_variables.map { |variable| object.instance_variable_get(variable) }
@@ -49,8 +43,6 @@ class Udacidata
     end
 
     def all
-      # TODO: when create method will not create duplicates on DB
-      #   then change here Product to create method call
       array = []
       CSV.foreach(data_path, headers: true) do |row|
         array << Product.new(row.to_hash)
@@ -81,13 +73,15 @@ class Udacidata
     def find(id)
       csv_data = CSV.table(data_path, headers: true)
       attrs = csv_data.detect { |row| row[:id] == id }
+      raise ProductNotFoundError, "No product found with id '#{id}'" unless attrs
       Product.new(attrs.to_hash)
     end
 
     def destroy(id)
-      deleted_object = ''
+      deleted_object = nil
       csv_data = CSV.table(data_path, headers: true)
       csv_data.delete_if { |row| row[:id] == id && deleted_object = Product.new(row.to_hash) }
+      raise ProductNotFoundError, "No product found with id '#{id}'" unless deleted_object
       File.open(data_path, 'w') { |file| file.write(csv_data.to_csv) }
       deleted_object
     end
@@ -108,11 +102,12 @@ class Udacidata
       keys = options.keys
       csv = CSV.foreach(data_path, headers: true)
       selected_rows = csv.select do |row|
-        should_select = false
+        should_select = []
         keys.each do |key|
-          should_select = true if row[key.to_s] == options[key]
+          result = key == :price ? (row[key.to_s].to_f == options[key]) : (row[key.to_s] == options[key])
+          should_select.push(result)
         end
-        should_select
+        should_select.all?
       end
       selected_rows.map { |row| Product.new(row.to_hash) }
     end
