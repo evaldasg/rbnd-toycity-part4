@@ -1,17 +1,15 @@
 require_relative 'find_by'
 require_relative 'errors'
 require 'csv'
-require 'byebug'
 
 class Udacidata
-  # Your code goes here!
-
   def update(attrs = {})
     attrs.keys.each { |key| instance_variable_set("@#{key}", attrs[key]) if instance_variable_defined?("@#{key}") }
     update_in_db(attrs)
     self
   end
 
+  # Used in print_report to pretty print report's table
   def to_hash
     instance_variables.each_with_object({}) do |variable, hash|
       hash[variable.to_s.delete('@').to_sym] = instance_variable_get(variable)
@@ -32,6 +30,8 @@ class Udacidata
   end
 
   class << self
+    create_finder_methods :brand, :name
+
     def create(attrs = nil)
       # objects = where(attrs)
       # return objects.first unless objects.empty?
@@ -84,18 +84,6 @@ class Udacidata
       raise ProductNotFoundError, "No product found with id '#{id}'" unless deleted_object
       File.open(data_path, 'w') { |file| file.write(csv_data.to_csv) }
       deleted_object
-    end
-
-    def find_by_brand(value)
-      csv_data = CSV.table(data_path, headers: true)
-      attrs = csv_data.detect { |row| row[:brand] == value }
-      Product.new(attrs.to_hash)
-    end
-
-    def find_by_name(value)
-      csv_data = CSV.table(data_path, headers: true)
-      attrs = csv_data.detect { |row| row[:name] == value }
-      Product.new(attrs.to_hash)
     end
 
     def where(options = {})
